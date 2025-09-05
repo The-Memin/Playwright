@@ -1,61 +1,47 @@
-# Playwright - Fullstack Open Blog App Exercises
+# Bloglist E2E Tests With Playwright
 
-This repository contains **end-to-end (E2E) tests** built with [Playwright](https://playwright.dev/) as part of the [Fullstack Open](https://fullstackopen.com/en/) course.  
-The tests are designed to validate both frontend and backend functionality of the **Blog application** developed during the course.  
+This project contains the **end-to-end (E2E) tests** for the **Bloglist** application, developed during the [Full Stack Open](https://fullstackopen.com/) course.
 
----
+## 🚀 Requirements
+
+Before running the tests, make sure you have:
+
+- Node.js and npm installed.
+- The following projects cloned in the **same folder** and running:
+  - Backend: [fullstackopen-bloglist](https://github.com/The-Memin/fullstackopen-bloglist)
+  - Frontend: [bloglist-frontend](https://github.com/The-Memin/bloglist-frontend)
+
+Example structure:
+```
+📂 bloglist-projects
+│── 📂 fullstackopen-bloglist (backend)
+│── 📂 bloglist-frontend (frontend)
+│── 📂 Playwright (this repo)
+```
 
 ## 📦 Installation
 
-Clone the repository and install dependencies:
+Clone this repository inside the same folder where you have the **backend** and **frontend**, then install the dependencies:
 
 ```bash
 git clone https://github.com/The-Memin/Playwright.git
 cd Playwright
 npm install
 ```
+## ▶️ Running the tests
 
----
+Make sure both backend and frontend are running before executing the tests.
 
-## ▶️ Running Tests
+### UI Mode (recommended for development):
 
-Make sure both the **backend** and **frontend** servers of your Blog project are running. Then run:
-
+```bash
+npm run test -- --ui
+```
+### Normal test
 ```bash
 npm test
 ```
 
-This will execute all Playwright tests.  
+> 💡 Tip: by default, the backend should run on port 3001 and the frontend on 5173.
 
-To open the **Playwright UI** for debugging:
-
-```bash
-npm exec playwright test --ui
-```
-
----
-
-## 🛠 Project Structure
-
-```
-Playwright/
-│── tests/            # Test files
-│── playwright.config.js
-│── package.json
-│── README.md
-```
-
----
-
-## 🌍 Requirements
-
-- Node.js >= 18  
-- npm  
-- Running backend & frontend applications from the Fullstack Open Blog project  
-
----
-
-## 📚 Resources
-
-- [Playwright Docs](https://playwright.dev/docs/intro)  
-- [Fullstack Open](https://fullstackopen.com/en/)  
+> If you’re using different ports, update the Playwright configuration accordingly.
