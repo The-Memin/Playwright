@@ -10,7 +10,7 @@ The tests are designed to validate both frontend and backend functionality of th
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/your-username/Playwright.git
+git clone https://github.com/The-Memin/Playwright.git
 cd Playwright
 npm install
 ```
