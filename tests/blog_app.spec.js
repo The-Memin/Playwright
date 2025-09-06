@@ -28,5 +28,23 @@ describe('Blog app', () => {
             await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
             await expect(errorDiv).toHaveCSS('border-style', 'solid')
         })
+
+        describe('When logged in', () => {
+               beforeEach(async ({ page }) => {
+                    loginWith(page, { username: TEST_USER.username, password: TEST_USER.password })
+               })
+               test('a new blog can be created', async ({ page }) => {
+                    const blogsBefore = await page.locator('.blog').count()
+                    await page.getByRole('button', { name: 'create a new blog' }).click()
+                    await page.getByPlaceholder('title').fill('a blog created by playwright')
+                    await page.getByPlaceholder('author').fill('playwright')
+                    await page.getByPlaceholder('url').fill('www.playwright.com')
+                    await page.getByRole('button', { name: 'create' }).click()
+                    await expect(page.getByText(`a new blog You're NOT gonna need it! by playwright added`)).toBeVisible()
+                    const blogsAfter = await page.locator('.blog').count()
+                    expect(blogsAfter).toBe(blogsBefore + 1)
+                    await expect(page.getByText('a blog created by playwright')).toBeVisible()
+               })
+        })
     })
 })
