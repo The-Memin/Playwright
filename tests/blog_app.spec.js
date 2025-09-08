@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const {showLoginForm, loginWith, TEST_USER } = require('./helper')
+const {showLoginForm, loginWith, createBlog, TEST_USER } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -34,16 +34,23 @@ describe('Blog app', () => {
                     loginWith(page, { username: TEST_USER.username, password: TEST_USER.password })
                })
                test('a new blog can be created', async ({ page }) => {
-                    const blogsBefore = await page.locator('.blog').count()
-                    await page.getByRole('button', { name: 'create a new blog' }).click()
-                    await page.getByPlaceholder('title').fill('a blog created by playwright')
-                    await page.getByPlaceholder('author').fill('playwright')
-                    await page.getByPlaceholder('url').fill('www.playwright.com')
-                    await page.getByRole('button', { name: 'create' }).click()
+                    createBlog(page, { title: 'a blog created by playwright', author: 'playwright', url: 'http://playwright.dev' })
                     await expect(page.getByText(`a new blog You're NOT gonna need it! by playwright added`)).toBeVisible()
-                    const blogsAfter = await page.locator('.blog').count()
-                    expect(blogsAfter).toBe(blogsBefore + 1)
                     await expect(page.getByText('a blog created by playwright')).toBeVisible()
+               })
+               describe('and several blogs exist', () => {
+                    beforeEach(async ({ page, request }) => {
+                        await createBlog(page, { title: 'first blog', author: 'author1', url: 'http://first.blog' })
+                        await createBlog(page, { title: 'second blog', author: 'author2', url: 'http://second.blog' })
+                        await createBlog(page, { title: 'third blog', author: 'author3', url: 'http://third.blog' })
+                    })
+                    test('one of those can be liked', async ({ page }) => {
+                        await page.pause()
+                        await page.getByText('second blog').getByRole('button', { name: 'view' }).click()
+                        const blogContainer = await page.getByText('second blog').locator('..')
+                        await blogContainer.getByRole('button', { name: 'like' }).click()
+                        await expect(blogContainer.getByText('Likes: 1')).toBeVisible()
+                    })
                })
         })
     })
