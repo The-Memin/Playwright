@@ -40,7 +40,7 @@ describe('Blog app', () => {
                })
                describe('and several blogs exist', () => {
                     beforeEach(async ({ page, request }) => {
-                        await createBlog(page, { title: 'first blog', author: 'author1', url: 'http://first.blog' })
+                        await createBlog(page, { title: 'first blog', author: TEST_USER.username, url: 'http://first.blog' })
                         await createBlog(page, { title: 'second blog', author: 'author2', url: 'http://second.blog' })
                         await createBlog(page, { title: 'third blog', author: 'author3', url: 'http://third.blog' })
                     })
@@ -50,6 +50,19 @@ describe('Blog app', () => {
                         const blogContainer = await page.getByText('second blog').locator('..')
                         await blogContainer.getByRole('button', { name: 'like' }).click()
                         await expect(blogContainer.getByText('Likes: 1')).toBeVisible()
+                    })
+                    test('one of those can be deleted', async ({ page }) => {
+                        await page.getByText('first blog').getByRole('button', { name: 'view' }).click()
+                        const blogContainer = await page.getByText('first blog').locator('..')
+
+                        page.once('dialog', async dialog => {
+                            expect(dialog.type()).toBe('confirm')
+                            expect(dialog.message()).toBe(`Remove blog You're NOT gonna need it! by ${TEST_USER.username}`)
+                            await dialog.accept()
+                        })
+
+                        await blogContainer.getByRole('button', { name: 'remove' }).click()
+                        await expect(page.getByText('first blog')).not.toBeVisible()
                     })
                })
         })
