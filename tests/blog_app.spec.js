@@ -64,6 +64,20 @@ describe('Blog app', () => {
                         await blogContainer.getByRole('button', { name: 'remove' }).click()
                         await expect(page.getByText('first blog')).not.toBeVisible()
                     })
+
+                    test('delete button is only shown for blogs created by the logged in user', async ({ page, request }) => {
+                        await page.getByText('first blog').getByRole('button', { name: 'view' }).click()
+                        const blogContainer1 = await page.getByText('first blog').locator('..')
+                        await expect(blogContainer1.getByRole('button', { name: 'remove' })).toBeVisible()
+
+                        await page.getByText('second blog').getByRole('button', { name: 'view' }).click()
+                        const blogContainer = await page.getByText('second blog').locator('..')
+                        await expect(blogContainer.getByRole('button', { name: 'remove' })).not.toBeVisible()
+
+                        await page.getByText('third blog').getByRole('button', { name: 'view' }).click()
+                        const blogContainer3 = await page.getByText('third blog').locator('..')
+                        await expect(blogContainer3.getByRole('button', { name: 'remove' })).not.toBeVisible()
+                    })
                })
         })
     })
